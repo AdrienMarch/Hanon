@@ -1,6 +1,6 @@
 # Hanon
 
-Python framework for inverse problems in computational imaging
+Neural-network-based image denoising and reconstruction in Python.
 
 ## Quick Start
 
