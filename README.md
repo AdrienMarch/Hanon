@@ -1,10 +1,10 @@
 # Hanon
 
-Projet Python initialisé avec Git et environnement virtuel local.
+Python project initialized with Git and a local virtual environment.
 
-## Démarrage rapide
+## Quick Start
 
-1. Activer l'environnement virtuel:
+1. Activate the virtual environment:
    - PowerShell: `./.venv/Scripts/Activate.ps1`
-2. Installer les dépendances (si nécessaire):
+2. Install dependencies (if needed):
    - `pip install -r requirements.txt`
