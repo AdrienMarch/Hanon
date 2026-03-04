@@ -1,6 +1,6 @@
 # Hanon
 
-Python project initialized with Git and a local virtual environment.
+Python framework for inverse problems in computational imaging
 
 ## Quick Start
 
