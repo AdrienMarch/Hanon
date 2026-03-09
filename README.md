@@ -26,6 +26,7 @@ This project implements a CNN-based image denoising system that:
 - NumPy
 - Matplotlib
 - scikit-learn
+- Pillow (PIL) - for loading JPG/PNG images in examples
 
 ### Setup
 
@@ -39,7 +40,7 @@ This project implements a CNN-based image denoising system that:
 
 3. **Install dependencies**:
    ```bash
-   pip install torch torchvision numpy matplotlib scikit-learn
+   pip install torch torchvision numpy matplotlib scikit-learn pillow
    ```
 
    Or if you have a `requirements.txt`:
@@ -74,6 +75,94 @@ The notebook follows this pipeline:
 4. **Model Architecture**: Builds 17-layer DnCNN
 5. **Training**: Trains for 50 epochs using MSE loss
 6. **Evaluation**: Visualizes denoising performance on test images
+
+## 📦 Python Module (`python/functions.py`)
+
+The `python/` directory contains reusable components for image denoising:
+
+### `MyDataset` Class
+Custom PyTorch Dataset for handling image denoising pairs (noisy → clean).
+
+```python
+from python.functions import MyDataset
+
+dataset = MyDataset(noisy_images, clean_images, 
+                   transform=add_channel,
+                   target_transform=add_channel)
+```
+
+### `add_channel()` Function
+Converts numpy images to PyTorch tensors with proper normalization.
+
+```python
+from python.functions import add_channel
+
+# Convert image to tensor: (H, W) → (1, H, W), normalized to [0, 1]
+tensor_image = add_channel(numpy_image)
+```
+
+## 💾 Saving and Loading Models
+
+### Save a Trained Model
+
+After training, save your model:
+
+```python
+# Save model parameters (recommended)
+torch.save(cnn.state_dict(), 'CNN/dncnn_model.pth')
+
+# Or save complete model
+torch.save(cnn, 'CNN/dncnn_model.pth')
+
+# Save checkpoint with training info
+torch.save({
+    'epoch': epochs,
+    'model_state_dict': cnn.state_dict(),
+    'optimizer_state_dict': optimizer.state_dict(),
+    'loss': train_losses[-1],
+}, 'CNN/dncnn_checkpoint.pth')
+```
+
+### Load a Saved Model
+
+```python
+# Load state dict (requires model architecture)
+cnn = nn.Sequential(*layers).to(device)
+cnn.load_state_dict(torch.load('CNN/dncnn_model.pth'))
+cnn.eval()
+
+# Or load complete model
+cnn = torch.load('CNN/dncnn_model.pth')
+cnn.eval()
+```
+
+## 📸 Examples
+
+### Single Image Denoising (`Examples/Single_image.ipynb`)
+
+This example demonstrates how to use a pre-trained model to denoise a single image:
+
+1. **Navigate to Examples directory**:
+   ```bash
+   cd Examples
+   jupyter notebook
+   ```
+
+2. **Open** `Single_image.ipynb`
+
+3. **What it does**:
+   - Loads a custom JPG image (`notebook.jpg`)
+   - Converts it to grayscale numpy array (0-255)
+   - Loads the pre-trained DnCNN model from `CNN/dncnn_model.pth`
+   - Denoises the image
+   - Displays before/after comparison
+
+4. **Usage**:
+   - Replace `Notebook.jpg` with your own image
+   - Ensure the model path points to your trained model
+   - Run all cells to see denoising results
+
+**Note**: The example imports functions from `python/functions.py`, which is added to the Python path automatically within the notebook.
 
 ## 🏗️ Architecture
 
@@ -123,10 +212,17 @@ The model successfully removes Gaussian noise while preserving facial features a
 
 ```
 Hanon/
-├── Hanon.ipynb          # Main Jupyter notebook
+├── Hanon.ipynb          # Main training notebook (full pipeline)
 ├── README.md            # This file
 ├── Data/
-│   └── Img.npy         # Cached LFW dataset (created on first run)
+│   ├── Img.npy         # Cached LFW dataset (created on first run)
+│   └── Notebook.jpg    # Sample test image
+├── CNN/
+│   └── dncnn_model.pth # Saved trained model
+├── python/
+│   └── functions.py    # Reusable dataset and transform functions
+├── Examples/
+│   └── Single_image.ipynb  # Example: Denoise a single image
 └── .venv/              # Virtual environment (optional)
 ```
 
@@ -200,8 +296,6 @@ This project is provided for educational purposes. Please refer to the original 
 ## 🙏 Acknowledgments
 
 - DnCNN architecture by Zhang et al.
-- LFW dataset from University of Massachusetts
-- PyTorch framework by Meta AI
 
 ---
 
