@@ -1,4 +1,4 @@
-# Hanon - DnCNN Image Denoising
+# Hanon - DnCNN Image Denoising (work in progress...)
 
 A PyTorch implementation of **DnCNN (Denoising Convolutional Neural Network)** for image denoising using residual learning. This project demonstrates how deep learning can effectively remove noise from images while preserving important details.
 
