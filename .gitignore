@@ -20,8 +20,6 @@ dist/
 .vscode/
 
 # Data files
-Data/
+Data_perso/
 
 .claude/
-
-.gitignore
