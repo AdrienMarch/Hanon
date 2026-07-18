@@ -21,3 +21,7 @@ dist/
 
 # Data files
 Data/
+
+.claude/
+
+.gitignore
